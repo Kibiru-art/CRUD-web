@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Library</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="#">My Library</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link active" href="#" id="nav-home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" id="nav-library">Library</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" id="nav-add">Add Book</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <!-- Home Section -->
+    <div id="homeSection">
+      <h1 class="mb-3">WELCOME!</h1>
+      <div class="row mb-3">
+        <div class="col-md-4 mb-2">
+          <div class="bg-primary text-white p-4 rounded text-center">
+            Total Books: <strong id="totalBooks">0</strong>
+          </div>
+        </div>
+        <div class="col-md-4 mb-2">
+          <div class="bg-success text-white p-4 rounded text-center">
+            Books Read: <strong id="readBooks">0</strong>
+          </div>
+        </div>
+        <div class="col-md-4 mb-2">
+          <div class="bg-warning text-white p-4 rounded text-center">
+            Unread: <strong id="unreadBooks">0</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Library Section -->
+    <div id="librarySection" style="display: none;">
+      <h2 class="mb-3">My Library</h2>
+      <div id="emptyLibraryMessage" class="text-center text-muted mt-4">
+        <p><strong>Nothing Here!</strong></p>
+      </div>
+      <div class="row" id="bookList">
+        <!-- Books will appear here -->
+      </div>
+    </div>
+
+    <!-- Add Book Section -->
+    <div id="addBookSection" style="display: none;">
+      <div class="card mb-4">
+        <div class="card-header">Add a New Book</div>
+        <div class="card-body">
+          <!-- Alerts -->
+          <div id="addAlert" class="alert alert-success alert-dismissible fade show" style="display: none;" role="alert">
+            Book added successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+          <div id="editAlert" class="alert alert-primary alert-dismissible fade show" style="display: none;" role="alert">
+            Book updated successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+          <div id="deleteAlert" class="alert alert-danger alert-dismissible fade show" style="display: none;" role="alert">
+            Book deleted successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+
+          <form id="bookForm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Book Title" id="title" required />
+              </div>
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Author" id="author" required />
+              </div>
+              <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Genre" id="genre" required />
+              </div>
+              <div class="col-md-4">
+                <select class="form-select" id="status">
+                  <option value="Read">Read</option>
+                  <option value="Unread">Unread</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <input type="url" class="form-control" placeholder="Cover Image URL" id="cover" />
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary">+ Add Book</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = {
+      home: document.getElementById('homeSection'),
+      library: document.getElementById('librarySection'),
+      add: document.getElementById('addBookSection')
+    };
+
+    function showSection(selected) {
+      for (let key in sections) {
+        sections[key].style.display = key === selected ? 'block' : 'none';
+      }
+
+      navLinks.forEach(link => link.classList.remove('active'));
+      document.getElementById(`nav-${selected}`).classList.add('active');
+    }
+
+    document.getElementById('nav-home').addEventListener('click', e => {
+      e.preventDefault();
+      showSection('home');
+    });
+
+    document.getElementById('nav-library').addEventListener('click', e => {
+      e.preventDefault();
+      showSection('library');
+    });
+
+    document.getElementById('nav-add').addEventListener('click', e => {
+      e.preventDefault();
+      showSection('add');
+    });
+
+    const bookForm = document.getElementById('bookForm');
+    const bookList = document.getElementById('bookList');
+    const emptyLibraryMessage = document.getElementById('emptyLibraryMessage');
+
+    let books = [];
+    let editingCard = null;
+
+    function updateCounters() {
+      const total = books.length;
+      const read = books.filter(book => book.status === "Read").length;
+      const unread = total - read;
+
+      document.getElementById("totalBooks").innerText = total;
+      document.getElementById("readBooks").innerText = read;
+      document.getElementById("unreadBooks").innerText = unread;
+    }
+
+    function updateEmptyLibraryMessage() {
+      emptyLibraryMessage.style.display = books.length === 0 ? 'block' : 'none';
+    }
+
+    function createBookCard(book, index) {
+      const col = document.createElement('div');
+      col.className = 'col-sm-6 col-md-4 col-lg-3 mb-3';
+      col.dataset.index = index;  // Changed this line
+
+      col.innerHTML = `
+        <div class="card h-100">
+          <img src="${book.cover}" class="card-img-top" style="height: 200px; object-fit: cover;" />
+          <div class="card-body">
+            <h5 class="card-title">${book.title}</h5>
+            <p class="card-text">Author: ${book.author}</p>
+            <p class="card-text">Genre: ${book.genre}</p>
+            <span class="badge bg-${book.status === "Read" ? "success" : "warning"}">${book.status}</span>
+          </div>
+          <div class="card-footer d-flex justify-content-between">
+            <button class="btn btn-sm btn-outline-primary edit-btn">Edit</button>
+            <button class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
+          </div>
+        </div>
+      `;
+
+      return col;
+    }
+
+    function showAlert(alertId) {
+      const alert = document.getElementById(alertId);
+      alert.style.display = 'block';
+      setTimeout(() => {
+        alert.style.display = 'none';
+      }, 3000);
+    }
+
+    function loadBooks() {
+      fetch('http://localhost/my_library/books.php')
+        .then(response => response.json())
+        .then(data => {
+          books = data;
+          bookList.innerHTML = '';
+          books.forEach((book, index) => {
+            bookList.appendChild(createBookCard(book, index));
+          });
+          updateCounters();
+          updateEmptyLibraryMessage();
+        })
+        .catch(err => console.error(err));
+    }
+
+    bookForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const title = document.getElementById('title').value.trim();
+      const author = document.getElementById('author').value.trim();
+      const genre = document.getElementById('genre').value.trim();
+      const status = document.getElementById('status').value;
+      const cover = document.getElementById('cover').value.trim() || 'https://via.placeholder.com/150x200';
+
+      const book = { title, author, genre, status, cover };
+
+      fetch('http://localhost/my_library/books.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(book)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          showAlert('addAlert');
+          bookForm.reset();
+          loadBooks(); // reload updated list
+          showSection('library');
+        } else {
+          alert('Failed to add book. Server error.');
+        }
+      })
+      .catch(err => {
+        console.error('Fetch error:', err);
+        alert('Could not connect to server.');
+      });
+    });
+
+    // Event Listener for Delete Book
+    bookList.addEventListener('click', function (e) {
+  const btn = e.target;
+
+  if (btn.classList.contains('delete-btn')) {
+    const col = btn.closest('[data-id]');
+    const bookId = col.dataset.id;
+
+    // Send DELETE request to delete_book.php
+    if (btn.classList.contains('delete-btn')) {
+  const col = btn.closest('[data-id]'); // Ensure this is the correct element containing the data-id attribute
+  const bookId = col.dataset.id; // Ensure this contains the correct ID of the book
+
+  if (!bookId) {
+    alert('Book ID is missing!');
+    return;
+  }
+
+  // Send DELETE request to delete_book.php
+  fetch('http://localhost/my_library/delete_book.php', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id: bookId }) // Send the ID as JSON
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      col.remove(); // Remove the book from the UI
+      updateCounters();
+      updateEmptyLibraryMessage();
+      showAlert('deleteAlert');
+    } else {
+      alert(data.message); // Show error message from the server
+    }
+  })
+  .catch(err => {
+    console.error('Error:', err);
+    alert('Could not connect to the server.');
+  });
+}
+  }
+
+  if (btn.classList.contains('edit-btn')) {
+    const card = btn.closest('.card');
+    const col = btn.closest('[data-id]');
+
+    document.getElementById('title').value = card.querySelector('.card-title').innerText;
+    document.getElementById('author').value = card.querySelectorAll('.card-text')[0].innerText.replace('Author: ', '');
+    document.getElementById('genre').value = card.querySelectorAll('.card-text')[1].innerText.replace('Genre: ', '');
+    document.getElementById('status').value = card.querySelector('.badge').innerText;
+    document.getElementById('cover').value = card.querySelector('img').src;
+
+    editingCard = col;
+    showSection('add');
+  }
+});
+
+
+    // Load books on page load
+    window.addEventListener('DOMContentLoaded', loadBooks);
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
