@@ -72,24 +72,30 @@ document.addEventListener('DOMContentLoaded', () => {
       emptyLibraryMessage.style.display = books.length === 0 ? 'block' : 'none';
     }
   
-    function createBookCard(book) {
+    function createBookCard(book, index) {
       const col = document.createElement('div');
       col.className = 'col-sm-6 col-md-4 col-lg-3 mb-3';
-  
+      col.dataset.id = book.id;  // Use the actual book ID
+    
       col.innerHTML = `
         <div class="card h-100">
-          <img src="${book.cover}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Book Cover" />
+          <img src="${book.cover}" class="card-img-top" style="height: 200px; object-fit: cover;" />
           <div class="card-body">
             <h5 class="card-title">${book.title}</h5>
             <p class="card-text">Author: ${book.author}</p>
             <p class="card-text">Genre: ${book.genre}</p>
             <span class="badge bg-${book.status === "Read" ? "success" : "warning"}">${book.status}</span>
           </div>
+          <div class="card-footer d-flex justify-content-between">
+            <button class="btn btn-sm btn-outline-primary edit-btn">Edit</button>
+            <button class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
+          </div>
         </div>
       `;
-  
+    
       return col;
     }
+    
   
     function showAlert(alertId) {
       const alert = document.getElementById(alertId);
