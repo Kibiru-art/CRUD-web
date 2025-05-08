@@ -28,26 +28,40 @@
 
   <div class="container mt-4">
     <!-- Home Section -->
-    <div id="homeSection">
-      <h1 class="mb-3">WELCOME!</h1>
-      <div class="row mb-3">
-        <div class="col-md-4 mb-2">
-          <div class="bg-primary text-white p-4 rounded text-center">
-            Total Books: <strong id="totalBooks">0</strong>
-          </div>
-        </div>
-        <div class="col-md-4 mb-2">
-          <div class="bg-success text-white p-4 rounded text-center">
-            Books Read: <strong id="readBooks">0</strong>
-          </div>
-        </div>
-        <div class="col-md-4 mb-2">
-          <div class="bg-warning text-white p-4 rounded text-center">
-            Unread: <strong id="unreadBooks">0</strong>
-          </div>
+<div id="homeSection">
+  <div class="text-center mb-4">
+    <h1 class="display-5 fw-bold">📚 Welcome to Your Personal Library</h1>
+    <p class="text-muted fs-5">Track, organize, and enjoy your book collection anytime.</p>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm border-0 text-center h-100">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-journal-bookmark-fill text-primary"></i> Total Books</h5>
+          <p class="display-6 fw-bold text-primary" id="totalBooks">0</p>
         </div>
       </div>
     </div>
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm border-0 text-center h-100">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-book-half text-success"></i> Books Read</h5>
+          <p class="display-6 fw-bold text-success" id="readBooks">0</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm border-0 text-center h-100">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-book text-warning"></i> Unread Books</h5>
+          <p class="display-6 fw-bold text-warning" id="unreadBooks">0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <!-- Library Section -->
     <div id="librarySection" style="display: none;">
@@ -88,8 +102,10 @@
               <div class="col-md-4">
                 <input type="text" class="form-control" placeholder="Genre" id="genre" required />
               </div>
-              <div class="col-md-4">
-                <select class="form-select" id="status">
+              <div class="col-md-6">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" required>
+                  <option value="" disabled selected>Choose status</option>
                   <option value="Read">Read</option>
                   <option value="Unread">Unread</option>
                 </select>
