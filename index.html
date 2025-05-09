@@ -90,7 +90,7 @@
             Book deleted successfully!
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
           </div>
-
+        
           <form id="bookForm">
             <div class="row g-3">
               <div class="col-md-6">
@@ -99,8 +99,10 @@
               <div class="col-md-6">
                 <input type="text" class="form-control" placeholder="Author" id="author" required />
               </div>
-              <div class="col-md-4">
-                <input type="text" class="form-control" placeholder="Genre" id="genre" required />
+          
+              <div class="col-md-6">
+                <label for="genre" class="form-label">Genre</label>
+                <input type="text" class="form-control" id="genre" placeholder="Genre" required />
               </div>
               <div class="col-md-6">
                 <label for="status" class="form-label">Status</label>
@@ -110,14 +112,18 @@
                   <option value="Unread">Unread</option>
                 </select>
               </div>
-              <div class="col-md-4">
+          
+              <div class="col-md-12">
+                <label for="cover" class="form-label">Cover Image URL</label>
                 <input type="url" class="form-control" placeholder="Cover Image URL" id="cover" />
               </div>
+          
               <div class="col-12">
                 <button type="submit" class="btn btn-primary">+ Add Book</button>
               </div>
             </div>
           </form>
+          
         </div>
       </div>
     </div>

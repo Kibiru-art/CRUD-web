@@ -4,21 +4,8 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: PUT, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// DB connection
-$host = "localhost";
-$dbname = "my_library";
-$username = "root";
-$password = "";
+include 'db.php'; // ✅ Include shared DB connection
 
-$conn = new mysqli($host, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-  http_response_code(500);
-  echo json_encode(["success" => false, "message" => "Connection failed: " . $conn->connect_error]);
-  exit();
-}
-
-// Only handle PUT requests
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
   $data = json_decode(file_get_contents("php://input"));
 

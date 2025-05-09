@@ -4,19 +4,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST, GET");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// DB connection
-$host = "localhost";
-$dbname = "my_library";
-$username = "root"; // or your DB user
-$password = "";     // your DB password
-
-$conn = new mysqli($host, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-  http_response_code(500);
-  echo json_encode(["success" => false, "message" => "Connection failed: " . $conn->connect_error]);
-  exit();
-}
+include 'db.php'; // ✅ Include shared DB connection
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   $sql = "SELECT * FROM books ORDER BY id DESC";
