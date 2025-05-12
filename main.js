@@ -33,14 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
     displayBooksByStatus("Unread");
     setActiveFilter("filterUnread");
   });
-  
+
   function setActiveFilter(activeId) {
     ["filterAll", "filterRead", "filterUnread"].forEach(id => {
       document.getElementById(id).classList.remove("active");
     });
     document.getElementById(activeId).classList.add("active");
   }
-  
 
   function showSection(selected) {
     for (let key in sections) {
@@ -171,30 +170,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Edit/Delete actions
+  // Edit/Delete actions with confirmation
   bookList.addEventListener('click', function (e) {
     const btn = e.target;
     const col = btn.closest('[data-id]');
     const bookId = col.dataset.id;
 
     if (btn.classList.contains('delete-btn')) {
-      fetch('http://localhost/my_library/delete_book.php', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: bookId })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          col.remove();
-          books = books.filter(b => b.id !== bookId);
-          updateCounters();
-          updateEmptyLibraryMessage();
-          showAlert('deleteAlert');
-        } else {
-          alert(data.message || 'Deletion failed.');
-        }
-      });
+      const confirmDelete = confirm("Are you sure you want to delete this book?");
+      if (confirmDelete) {
+        fetch('http://localhost/my_library/delete_book.php', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: bookId })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            col.remove();
+            books = books.filter(b => b.id !== bookId);
+            updateCounters();
+            updateEmptyLibraryMessage();
+            showAlert('deleteAlert');
+          } else {
+            alert(data.message || 'Deletion failed.');
+          }
+        });
+      }
     }
 
     if (btn.classList.contains('edit-btn')) {
