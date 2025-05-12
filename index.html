@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Library</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  
 
   <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container">
@@ -28,47 +28,55 @@
 
   <div class="container mt-4">
     <!-- Home Section -->
-<div id="homeSection">
-  <div class="text-center mb-4">
-    <h1 class="display-5 fw-bold">📚 Welcome to My Personal Library</h1>
-    <p class="text-muted fs-5">Track, organize, and enjoy your book collection anytime.</p>
-  </div>
+    <div id="homeSection">
+      <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold">📚 Welcome to My Personal Library</h1>
+        <p class="text-muted fs-5">Track, organize, and enjoy your book collection anytime.</p>
+      </div>
 
-  <div class="row mb-3">
-    <div class="col-md-4 mb-3">
-      <div class="card shadow-sm border-0 text-center h-100">
-        <div class="card-body">
-          <h5 class="card-title"><i class="bi bi-journal-bookmark-fill text-primary"></i> Total Books</h5>
-          <p class="display-6 fw-bold text-primary" id="totalBooks">0</p>
+      <div class="row mb-3">
+        <div class="col-md-4 mb-3">
+          <div class="card shadow-sm border-0 text-center h-100" id="cardTotal">
+            <div class="card-body">
+              <h5 class="card-title"><i class="bi bi-journal-bookmark-fill text-primary"></i> Total Books</h5>
+              <p class="display-6 fw-bold text-primary" id="totalBooks">0</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card shadow-sm border-0 text-center h-100" id="cardRead">
+            <div class="card-body">
+              <h5 class="card-title"><i class="bi bi-book-half text-success"></i> Books Read</h5>
+              <p class="display-6 fw-bold text-success" id="readBooks">0</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card shadow-sm border-0 text-center h-100" id="cardUnread">
+            <div class="card-body">
+              <h5 class="card-title"><i class="bi bi-book text-warning"></i> Unread Books</h5>
+              <p class="display-6 fw-bold text-warning" id="unreadBooks">0</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-4 mb-3">
-      <div class="card shadow-sm border-0 text-center h-100">
-        <div class="card-body">
-          <h5 class="card-title"><i class="bi bi-book-half text-success"></i> Books Read</h5>
-          <p class="display-6 fw-bold text-success" id="readBooks">0</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 mb-3">
-      <div class="card shadow-sm border-0 text-center h-100">
-        <div class="card-body">
-          <h5 class="card-title"><i class="bi bi-book text-warning"></i> Unread Books</h5>
-          <p class="display-6 fw-bold text-warning" id="unreadBooks">0</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 
     <!-- Library Section -->
     <div id="librarySection" style="display: none;">
-      <h2 class="mb-3">My Library</h2>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>My Library</h2>
+        <div class="btn-group" role="group" aria-label="Filter books">
+          <button type="button" class="btn btn-outline-secondary active" id="filterAll">All</button>
+          <button type="button" class="btn btn-outline-success" id="filterRead">Read</button>
+          <button type="button" class="btn btn-outline-warning" id="filterUnread">Unread</button>
+        </div>
+      </div>
+
       <div id="emptyLibraryMessage" class="text-center text-muted mt-4">
         <p><strong>Nothing Here!</strong></p>
       </div>
+
       <div class="row" id="bookList"></div>
     </div>
 
@@ -77,20 +85,19 @@
       <div class="card mb-4">
         <div class="card-header">Add a New Book</div>
         <div class="card-body">
-          <!-- Alerts -->
           <div id="addAlert" class="alert alert-success alert-dismissible fade show" style="display: none;" role="alert">
             Book added successfully!
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
           <div id="editAlert" class="alert alert-primary alert-dismissible fade show" style="display: none;" role="alert">
             Book updated successfully!
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
           <div id="deleteAlert" class="alert alert-danger alert-dismissible fade show" style="display: none;" role="alert">
             Book deleted successfully!
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
-        
+
           <form id="bookForm">
             <div class="row g-3">
               <div class="col-md-6">
@@ -99,7 +106,6 @@
               <div class="col-md-6">
                 <input type="text" class="form-control" placeholder="Author" id="author" required />
               </div>
-          
               <div class="col-md-6">
                 <label for="genre" class="form-label">Genre</label>
                 <input type="text" class="form-control" id="genre" placeholder="Genre" required />
@@ -112,198 +118,22 @@
                   <option value="Unread">Unread</option>
                 </select>
               </div>
-          
               <div class="col-md-12">
                 <label for="cover" class="form-label">Cover Image URL</label>
-                <input type="url" class="form-control" placeholder="Cover Image URL" id="cover" />
+                <input type="url" class="form-control" id="cover" placeholder="Cover Image URL" />
               </div>
-          
               <div class="col-12">
                 <button type="submit" class="btn btn-primary">+ Add Book</button>
               </div>
             </div>
           </form>
-          
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Scripts -->
-  <script>
-    let books = [];
-    let editingBookId = null;
-
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = {
-      home: document.getElementById('homeSection'),
-      library: document.getElementById('librarySection'),
-      add: document.getElementById('addBookSection')
-    };
-
-    function showSection(selected) {
-      for (let key in sections) {
-        sections[key].style.display = key === selected ? 'block' : 'none';
-      }
-      navLinks.forEach(link => link.classList.remove('active'));
-      document.getElementById(`nav-${selected}`).classList.add('active');
-    }
-
-    document.getElementById('nav-home').addEventListener('click', e => {
-      e.preventDefault();
-      showSection('home');
-    });
-
-    document.getElementById('nav-library').addEventListener('click', e => {
-      e.preventDefault();
-      showSection('library');
-    });
-
-    document.getElementById('nav-add').addEventListener('click', e => {
-      e.preventDefault();
-      showSection('add');
-    });
-
-    const bookForm = document.getElementById('bookForm');
-    const bookList = document.getElementById('bookList');
-    const emptyLibraryMessage = document.getElementById('emptyLibraryMessage');
-
-    function updateCounters() {
-      const total = books.length;
-      const read = books.filter(book => book.status === "Read").length;
-      const unread = total - read;
-      document.getElementById("totalBooks").innerText = total;
-      document.getElementById("readBooks").innerText = read;
-      document.getElementById("unreadBooks").innerText = unread;
-    }
-
-    function updateEmptyLibraryMessage() {
-      emptyLibraryMessage.style.display = books.length === 0 ? 'block' : 'none';
-    }
-
-    function createBookCard(book) {
-      const col = document.createElement('div');
-      col.className = 'col-sm-6 col-md-4 col-lg-3 mb-3';
-      col.dataset.id = book.id;
-
-      col.innerHTML = `
-        <div class="card h-100">
-         <img src="${book.cover}" class="card-img-top img-fluid" style="max-height: 200px; object-fit: contain;" />
-          <div class="card-body">
-            <h5 class="card-title">${book.title}</h5>
-            <p class="card-text">Author: ${book.author}</p>
-            <p class="card-text">Genre: ${book.genre}</p>
-            <span class="badge bg-${book.status === "Read" ? "success" : "warning"}">${book.status}</span>
-          </div>
-          <div class="card-footer d-flex justify-content-between">
-            <button class="btn btn-sm btn-outline-primary edit-btn">Edit</button>
-            <button class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
-          </div>
-        </div>
-      `;
-      return col;
-    }
-
-    function showAlert(alertId) {
-      const alert = document.getElementById(alertId);
-      alert.style.display = 'block';
-      setTimeout(() => alert.style.display = 'none', 3000);
-    }
-
-    function loadBooks() {
-      fetch('http://localhost/my_library/books.php')
-        .then(res => res.json())
-        .then(data => {
-          books = data;
-          bookList.innerHTML = '';
-          books.forEach(book => {
-            bookList.appendChild(createBookCard(book));
-          });
-          updateCounters();
-          updateEmptyLibraryMessage();
-        })
-        .catch(err => console.error('Fetch error:', err));
-    }
-
-    bookForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const book = {
-        title: document.getElementById('title').value.trim(),
-        author: document.getElementById('author').value.trim(),
-        genre: document.getElementById('genre').value.trim(),
-        status: document.getElementById('status').value,
-        cover: document.getElementById('cover').value.trim() || 'https://via.placeholder.com/150x200'
-      };
-
-      if (editingBookId) {
-        book.id = editingBookId;
-      }
-
-      fetch(editingBookId ? 'http://localhost/my_library/update_book.php' : 'http://localhost/my_library/books.php', {
-        method: editingBookId ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(book)
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          showAlert(editingBookId ? 'editAlert' : 'addAlert');
-          bookForm.reset();
-          editingBookId = null;
-          loadBooks();
-          showSection('library');
-        } else {
-          alert(data.message || 'Failed to save book.');
-        }
-      })
-      .catch(err => {
-        console.error('Error:', err);
-        alert('Could not connect to the server.');
-      });
-    });
-
-    bookList.addEventListener('click', function (e) {
-      const btn = e.target;
-      const col = btn.closest('[data-id]');
-      const bookId = col.dataset.id;
-
-      if (btn.classList.contains('delete-btn')) {
-        fetch('http://localhost/my_library/delete_book.php', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: bookId })
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            col.remove();
-            updateCounters();
-            updateEmptyLibraryMessage();
-            showAlert('deleteAlert');
-          } else {
-            alert(data.message || 'Deletion failed.');
-          }
-        });
-      }
-
-      if (btn.classList.contains('edit-btn')) {
-        const card = col.querySelector('.card');
-        editingBookId = bookId;
-
-        document.getElementById('title').value = card.querySelector('.card-title').innerText;
-        document.getElementById('author').value = card.querySelectorAll('.card-text')[0].innerText.replace('Author: ', '');
-        document.getElementById('genre').value = card.querySelectorAll('.card-text')[1].innerText.replace('Genre: ', '');
-        document.getElementById('status').value = card.querySelector('.badge').innerText;
-        document.getElementById('cover').value = card.querySelector('img').src;
-
-        showSection('add');
-      }
-    });
-
-    window.addEventListener('DOMContentLoaded', loadBooks);
-  </script>
-
+  <!-- JavaScript -->
+  <script src="main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
