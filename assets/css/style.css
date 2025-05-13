@@ -57,9 +57,19 @@ h1, h2, h3 {
   overflow: hidden;
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+/* Cursor and Hover Effects for Home Cards */
+#cardTotal,
+#cardRead,
+#cardUnread {
+  cursor: pointer; /* Hand cursor */
+}
+
+#cardTotal:hover,
+#cardRead:hover,
+#cardUnread:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: scale(1.02);
+  transition: all 0.2s ease;
 }
 
 /* Cover Image */
